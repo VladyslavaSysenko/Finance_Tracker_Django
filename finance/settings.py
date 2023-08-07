@@ -11,16 +11,20 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6cv7)ji%)-d*cc8^utjgd%t@70$t1@3nr!@(&r8_a49h_u#-&k'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,12 +87,12 @@ WSGI_APPLICATION = 'finance.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
+        "NAME": env('DATABASE_NAME'),
         "TEST": {
-            "NAME": "test_financedb",
+            "NAME": env('DATABASE_TEST_NAME'),
         },
-        "USER": "postgres",
-        "PASSWORD": "password",
+        "USER": env('DATABASE_USER'),
+        "PASSWORD": env('DATABASE_PASSWORD'),
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
@@ -147,7 +151,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework_json_api.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer' # comment to hide
+        'rest_framework.renderers.BrowsableAPIRenderer' # comment to hide 
     ),
     'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
     'DEFAULT_FILTER_BACKENDS': (
@@ -164,11 +168,10 @@ REST_FRAMEWORK = {
 }
 
 
-STATIC_URL = '/static/'
-
-# images storage
-import os
-
-MEDIA_URL = 'finance_tracker/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'finance_tracker/media')
-
+# To upload media files to AWS S3
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_FILE_OVERWRITE  = False
