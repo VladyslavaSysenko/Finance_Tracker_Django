@@ -3,13 +3,6 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
-# def get_dflt_category_expense():
-#     return ["Leisure", "Home", "Groceries", "Transportation", "Health", "Cafe", "Hobby", "Pets", "Education", "Rent", "Gift", "Other"]
-
-# def get_dflt_category_income():
-#     return ["Salary", "Gift", "Other"]
-
-
 class User(AbstractUser):
     def __str__(self):
         return f"id:{self.id} | username:{self.username}" 
@@ -18,7 +11,7 @@ class User(AbstractUser):
 class Currency(models.Model):
     code = models.CharField(max_length=3, unique=True)
     symbol = models.CharField(max_length=20, unique=True)
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return f"id:{self.id} | code:{self.code} | symbol: {self.symbol} | name: {self.name}"  
@@ -35,8 +28,8 @@ class Account(models.Model):
 
 class Category(models.Model):
     TYPE_CHOICES = (
-        ('E', 'Expense'),
-        ('I', 'Income')
+        ('e', 'Expense'),
+        ('i', 'Income')
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="categories")
     name = models.CharField(max_length=20)
@@ -52,11 +45,11 @@ class Category(models.Model):
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="expenses")
     amount = models.PositiveIntegerField()
-    currency_code = models.CharField(max_length=3)
+    currency_code = models.ForeignKey(Currency, to_field="code", on_delete=models.DO_NOTHING, related_name="expense")
     account = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name="expense_accounts")
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="expense_categories")
     comment = models.TextField(blank=True)
-    photo = models.ImageField(blank=True)
+    photo = models.ImageField(blank=True, upload_to='photos_expense')
     date = models.DateField(auto_now_add=True)
    
     def __str__(self):
@@ -66,11 +59,11 @@ class Expense(models.Model):
 class Income(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="incomes")
     amount = models.PositiveIntegerField()
-    currency_code = models.CharField(max_length=3)
+    currency_code = models.ForeignKey(Currency, to_field="code", on_delete=models.DO_NOTHING, related_name="income")
     account = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name="income_accounts")
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="income_categories")
     comment = models.TextField(blank=True)
-    photo = models.ImageField(blank=True)
+    photo = models.ImageField(blank=True, upload_to='photos_income')
     date = models.DateField(auto_now_add=True)
     def __str__(self):
         return f"id:{self.id} | user:{self.user} | amount: {self.amount} | cur: {self.currency_code} | account: {self.account} | categ:{self.category} | comment:{self.comment} | photo:{self.photo} | date: {self.date} "  
@@ -95,10 +88,10 @@ class Reminder(models.Model):
 class Budget(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="budgets")
     amount = models.PositiveIntegerField()
-    currency_code = models.CharField(max_length=3)
+    currency_code = models.ForeignKey(Currency, to_field="code", on_delete=models.DO_NOTHING, related_name="budget")
     account = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name="budget_accounts")
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="budget_categories")
-    due_date = models.DateTimeField()
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="budget_categories", null=True) # choose null if all expense categories
+    due_date = models.DateField()
     def __str__(self):
         return f"id:{self.id} | user:{self.user} | amount: {self.amount} | cur: {self.currency_code} | account: {self.account} | categ:{self.category} | due_date: {self.due_date} "  
 

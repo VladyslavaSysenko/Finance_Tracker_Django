@@ -33,12 +33,17 @@ AUTH_USER_MODEL = 'finance_tracker.User'
 
 INSTALLED_APPS = [
     'finance_tracker',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'django_cleanup',
+    'django_filters',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles'    
 ]
 
 MIDDLEWARE = [
@@ -130,3 +135,40 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     'rest_framework_json_api.parsers.JSONParser',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer' # comment to hide
+    ),
+    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework_json_api.filters.QueryParameterValidationFilter',
+        'rest_framework_json_api.filters.OrderingFilter',
+        'rest_framework_json_api.django_filters.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ),
+    'SEARCH_PARAM': 'filter[search]',
+    'TEST_REQUEST_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
+}
+
+
+STATIC_URL = '/static/'
+
+# images storage
+import os
+
+MEDIA_URL = 'finance_tracker/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'finance_tracker/media')
+

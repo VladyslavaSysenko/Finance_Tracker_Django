@@ -14,10 +14,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
 
-urlpatterns = [
-    path("", include("finance_tracker.urls")),
+from django.urls import path, include
+from django.contrib import admin
+from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
+
+
+router = routers.DefaultRouter()
+
+urlpatterns = router.urls
+
+urlpatterns += [
+    path("api/", include("finance_tracker.urls")),
     path('admin/', admin.site.urls),
+    path('api-token-auth/', obtain_auth_token),
 ]
+
+# for testing images
+from django.conf import settings
+from django.conf.urls.static import static 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
