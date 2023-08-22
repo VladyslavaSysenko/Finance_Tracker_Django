@@ -13,7 +13,8 @@ router.register(r'reminder', ReminderViewSet) # http://127.0.0.1:8000/api/remind
 router.register(r'budget', BudgetViewSet) # http://127.0.0.1:8000/api/budget/
 
 urlpatterns = [
-    path('auth/', include('rest_framework.urls')), # login and logout
-]
+    path('auth/', include('rest_framework.urls')), # login http://127.0.0.1:8000/api/auth/login
+                                                   # logout http://127.0.0.1:8000/api/auth/logout
+ ]
 
 urlpatterns += router.urls

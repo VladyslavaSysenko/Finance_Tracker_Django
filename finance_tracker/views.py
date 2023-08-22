@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
+from .permissions import *
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 
@@ -13,7 +14,7 @@ from rest_framework.decorators import action
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = [UserPermissions]
 
     # def get_queryset(self):
     #     pk = self.kwargs.get('pk')

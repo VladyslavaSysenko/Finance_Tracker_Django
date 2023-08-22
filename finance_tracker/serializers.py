@@ -4,9 +4,30 @@ from rest_framework import serializers
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
+
+	password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+
 	class Meta:
 		model = models.User
-		fields = ('id','username','email', 'is_staff')
+		fields = ('id','username','email', 'is_staff','password', 'password2')
+		extra_kwargs = {
+			'password': {'write_only': True},
+			'is_staff': {'read_only': True},
+			'is_active': {'read_only': True},
+			}
+	
+	def save(self):
+		account = models.User(
+				username = self.validated_data['username'],
+				email = self.validated_data['email']
+			)
+		password = self.validated_data['password']
+		password2 = self.validated_data['password2']
+		if password != password2:
+			raise serializers.ValidationError({'password': 'Passwords do not match.'})
+		account.set_password(password)
+		account.save()
+
 
 # Account Serializer
 class AccountSerializer(serializers.ModelSerializer):
