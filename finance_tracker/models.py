@@ -29,9 +29,7 @@ class Account(models.Model):
     )
 
     def __str__(self):
-        return (
-            f"id:{self.id} | name:{self.name} | dflt_curr_code: {self.dflt_curr_code}"
-        )
+        return f"id:{self.id} | name:{self.name} | dflt_curr_code: {self.dflt_curr_code}"
 
 
 class Category(models.Model):
@@ -64,7 +62,11 @@ class Expense(models.Model):
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"id:{self.id} | user:{self.user} | amount: {self.amount} | cur: {self.currency_code} | account: {self.account} | categ:{self.category} | comment:{self.comment} | photo:{self.photo} | date: {self.date} "
+        return (
+            f"id:{self.id} | user:{self.user} | amount: {self.amount} | cur: {self.currency_code} |"
+            f" account: {self.account} | categ:{self.category} | comment:{self.comment} |"
+            f" photo:{self.photo} | date: {self.date} "
+        )
 
 
 class Income(models.Model):
@@ -84,23 +86,25 @@ class Income(models.Model):
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"id:{self.id} | user:{self.user} | amount: {self.amount} | cur: {self.currency_code} | account: {self.account} | categ:{self.category} | comment:{self.comment} | photo:{self.photo} | date: {self.date} "
+        return (
+            f"id:{self.id} | user:{self.user} | amount: {self.amount} | cur: {self.currency_code} |"
+            f" account: {self.account} | categ:{self.category} | comment:{self.comment} |"
+            f" photo:{self.photo} | date: {self.date} "
+        )
 
 
 class Reminder(models.Model):
-    FREQUENCY_CHOICES = (
-        (0, "None"),
-        (1, "Daily"),
-        (7, "Weekly"),
-        (14, "Biweekly"),
-    )
+    FREQUENCY_CHOICES = ((0, "None"), (1, "Daily"), (7, "Weekly"), (14, "Biweekly"))
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reminders")
     text = models.TextField()
     date_time = models.DateTimeField()
     frequency = models.PositiveIntegerField(choices=FREQUENCY_CHOICES)
 
     def __str__(self):
-        return f"id:{self.id} | user:{self.user} | text: {self.text} | date_time: {self.date_time} | frequency:{self.frequency}"
+        return (
+            f"id:{self.id} | user:{self.user} | text: {self.text} | date_time: {self.date_time} |"
+            f" frequency:{self.frequency}"
+        )
 
 
 class Budget(models.Model):
@@ -113,12 +117,12 @@ class Budget(models.Model):
         Account, on_delete=models.DO_NOTHING, related_name="budget_accounts"
     )
     category = models.ForeignKey(
-        Category,
-        on_delete=models.DO_NOTHING,
-        related_name="budget_categories",
-        null=True,
+        Category, on_delete=models.DO_NOTHING, related_name="budget_categories", null=True
     )  # choose null if all expense categories
     due_date = models.DateField()
 
     def __str__(self):
-        return f"id:{self.id} | user:{self.user} | amount: {self.amount} | cur: {self.currency_code} | account: {self.account} | categ:{self.category} | due_date: {self.due_date} "
+        return (
+            f"id:{self.id} | user:{self.user} | amount: {self.amount} | cur: {self.currency_code} |"
+            f" account: {self.account} | categ:{self.category} | due_date: {self.due_date} "
+        )
