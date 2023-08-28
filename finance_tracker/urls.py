@@ -1,8 +1,9 @@
-from django.urls import path, include
-from rest_framework import routers
-from . views import *
 from django.conf import settings
-from django.conf.urls.static import static 
+from django.conf.urls.static import static
+from django.urls import include, path
+from rest_framework import routers
+
+from .views import *
 
 router = routers.DefaultRouter()
 router.register(r'user', UserViewSet, basename='user') # http://127.0.0.1:8000/api/user/

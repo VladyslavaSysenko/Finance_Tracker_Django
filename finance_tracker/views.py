@@ -1,14 +1,16 @@
 from json import JSONDecodeError
+
 from django.http import JsonResponse
-from rest_framework.parsers import JSONParser
-from rest_framework import views, status
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from .models import *
-from .serializers import *
-from .permissions import *
-from rest_framework import generics, viewsets
+from rest_framework import generics, status, views, viewsets
 from rest_framework.decorators import action
+from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from .models import *
+from .permissions import *
+from .serializers import *
+
 
 # User CRUD
 class UserViewSet(viewsets.ModelViewSet):
