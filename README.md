@@ -12,6 +12,11 @@ and go to http://127.0.0.1:8000/admin/ to see django admin interface.
 ---
 ## **To change database**
 
-- In your terminal, cd into the commerce directory. 
+- In your terminal, cd into the root directory. 
 - Run ***python manage.py makemigrations finance_tracker*** to make migrations for the finance tracker app.
 - Run ***python manage.py migrate*** to apply migrations to your database.
+
+## **To update schema for swagger and redoc**
+
+- In your terminal, cd into the root directory. 
+- Run ***python manage.py spectacular --file schema.yml*** to create/update schema.yml.
