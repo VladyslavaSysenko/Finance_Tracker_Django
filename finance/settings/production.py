@@ -1,3 +1,3 @@
-from .base import *
+from settings.base import *
 
 ALLOWED_HOSTS = ["*"]

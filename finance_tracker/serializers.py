@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from . import models
+from finance_tracker import models
 
 
 # User Serializer

@@ -7,9 +7,9 @@ from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import *
-from .permissions import *
-from .serializers import *
+from finance_tracker.models import *
+from finance_tracker.permissions import *
+from finance_tracker.serializers import *
 
 
 # User CRUD
